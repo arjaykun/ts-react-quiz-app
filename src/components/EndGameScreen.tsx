@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { quizContext } from "../quizContext"
 import { AMOUNT, Answer } from "../API";
 // get helper
-import { questionParser } from "../helpers/questionParser";
+import { htmlParser } from "../utils";
 // styles
 import { EndGameScreenWrapper, Title, BackButton, Subtitle, QuestionWrapper, AnswerStatus, QuestionText, Scores, IsCorrect} from './EndGameScreenStyles';
 
@@ -23,7 +23,7 @@ const EndGameScreen = ({ answers }: { answers: Answer[] }) => {
 
       { answers?.map((ans, i) => (
         <QuestionWrapper key={i}>
-          <QuestionText>{questionParser(ans.question)}</QuestionText>
+          <QuestionText>{htmlParser(ans.question)}</QuestionText>
           <AnswerStatus>
             Answer: {ans.answer} 
             <IsCorrect correct={ans.answer===ans.correctAnswer} >

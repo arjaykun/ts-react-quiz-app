@@ -1,4 +1,6 @@
 import axios from "axios";
+// get helper
+import { sortOptions } from './utils';
 
 const URI = "https://opentdb.com/api.php"; // ?amount=10&category=20&difficulty=easy&type=multiple
 
@@ -31,7 +33,7 @@ export const getQuestions = async (difficulty: DIFFICULTY) : Promise<Question[]>
     return result.map( (res: any) => ({
         category: res.category, 
         question: res.question,
-        options: [...res.incorrect_answers, res.correct_answer],
+        options: sortOptions([...res.incorrect_answers, res.correct_answer]),
         correctAnswer: res.correct_answer
     }));
 }

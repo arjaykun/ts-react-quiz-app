@@ -4,7 +4,7 @@ import EndGameScreen from './EndGameScreen';
 // get ENUM, Types
 import { AMOUNT } from '../API';
 // get helper
-import { questionParser } from '../helpers/questionParser';
+import { htmlParser } from '../utils';
 // styles
 import { QuizBoxWrapper, StartButton, OptionButton, QuestionText, NextButton } from './QuizBoxStyles'
 
@@ -41,9 +41,9 @@ const QuizBox = () => {
             { gameState === 'start' && <StartButton onClick={() => setGameState('on-game')}>Start Quiz</StartButton>}
             { gameState === 'on-game' &&
                 <>
-                    <QuestionText>{questionParser(questions[index]?.question)}</QuestionText>
+                    <QuestionText>{htmlParser(questions[index]?.question)}</QuestionText>
                     {
-                        questions[index]?.options.map((option, i) => (
+                      questions[index]?.options.map((option, i) => (
                             <div key={i}>
                                 <OptionButton
                                     onClick={() => handleAnswer(option)}
@@ -51,12 +51,12 @@ const QuizBox = () => {
                                     answered={!!answers[index]}
                                     isCorrect={Boolean(answers[index]) && (option === questions[index].correctAnswer)} 
                                 >
-                                    {option}
+                                    {htmlParser(option)}
                                 </OptionButton>
                             </div>
                         ))
                     }
-                    <NextButton onClick={nextIndex}>Next</NextButton>
+                    {!!answers[index] && <NextButton onClick={nextIndex}>Next</NextButton>}
                 </>
             }
             { gameState === 'gameover' && (<EndGameScreen answers={answers}></EndGameScreen>)}
