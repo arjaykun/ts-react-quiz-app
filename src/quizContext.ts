@@ -1,5 +1,5 @@
 import {createContext} from 'react';
-import { Question } from './API';
+import { Question,Answer } from './API';
 
 export interface AppState {
     gameState: string,
@@ -10,7 +10,9 @@ export interface AppState {
     setIndex: React.Dispatch<React.SetStateAction<number>>,
     questions: Question[],
     setQuestions: React.Dispatch<React.SetStateAction<Question[]>>,
-    startGame: () => void
+    answers: Answer[],
+    setAnswers: React.Dispatch<React.SetStateAction<Answer[]>>,
+    startGame: () => void,
   }
   
 export const quizContext = createContext<AppState>(null!);

@@ -1,28 +1,39 @@
 import React, { useContext } from 'react'
 import { quizContext } from "../quizContext"
 import { AMOUNT, Answer } from "../API";
+// get helper
+import { questionParser } from "../helpers/questionParser";
+// styles
+import { EndGameScreenWrapper, Title, BackButton, Subtitle, QuestionWrapper, AnswerStatus, QuestionText, Scores, IsCorrect} from './EndGameScreenStyles';
 
 const EndGameScreen = ({ answers }: { answers: Answer[] }) => {
-  const { score } = useContext(quizContext);
+  const { score, setGameState } = useContext(quizContext);
 
   return (
-    <div>
-      <h2>Game Over!</h2>
+    <EndGameScreenWrapper>
+      <Title>Game Over!</Title>
 
-      <h3>You scored {score} out of {AMOUNT} questions!</h3>
+      <BackButton onClick={ () => setGameState("start") } >Back to Main</BackButton>
+      
+      <Scores>You scored {score} out of {AMOUNT} questions!</Scores>
 
       <hr />
-      <h3>Summary</h3>
-      { answers?.map(ans => (
-        <div>
-          <h4>{ans.question}</h4>
-          <p>
-            Answer: {ans.answer} {ans.correct ? <span>(correct)</span> : <span>(incorrect)</span>} <br />
+      <Subtitle>Summary</Subtitle>
+      <hr />
+
+      { answers?.map((ans, i) => (
+        <QuestionWrapper key={i}>
+          <QuestionText>{questionParser(ans.question)}</QuestionText>
+          <AnswerStatus>
+            Answer: {ans.answer} 
+            <IsCorrect correct={ans.answer===ans.correctAnswer} >
+              ({ans.answer===ans.correctAnswer? 'correct' : 'incorrect'})
+            </IsCorrect> <br />
             {!ans.correct && "Correct answer: " + ans.correctAnswer}
-          </p>
-        </div>
+          </AnswerStatus>
+        </QuestionWrapper>
       ))}
-    </div>
+    </EndGameScreenWrapper>
   )
 }
 

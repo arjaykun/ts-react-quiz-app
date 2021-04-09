@@ -8,7 +8,6 @@ export enum DIFFICULTY {
     HARD = "hard"
 }
 
-
 export type Question = {
     category: string;
     question: string,
@@ -23,7 +22,7 @@ export type Answer = {
     correct: boolean
 }
 
-export const AMOUNT = 2;
+export const AMOUNT = 10;
 
 export const getQuestions = async (difficulty: DIFFICULTY) : Promise<Question[]> => {
     const questions = await axios.get(`${URI}?amount=${AMOUNT}&difficulty=${difficulty}`);

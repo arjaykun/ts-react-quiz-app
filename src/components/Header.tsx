@@ -2,19 +2,21 @@ import React, { useContext } from 'react'
 import { quizContext } from '../quizContext';
 // Get AMOUNT
 import { AMOUNT } from '../API';
+// styles
+import { HeaderWrapper, Title, Score, Index } from './HeaderStyles';
 
 const Header = () => {
 
   const { score, index, gameState } = useContext(quizContext);
 
   return (
-    <div>
-      <h1>Quiz App</h1>
+    <HeaderWrapper>
+      <Title>Quiz App</Title>
       { gameState === 'on-game' && <>
-        <h3>Score: {score} </h3>
-        <h5>Question # {index + 1} out of {AMOUNT}</h5>
+        <Score>Score: {score} </Score>
+        <Index>Question # {index + 1} out of {AMOUNT}</Index>
       </>}
-    </div>
+    </HeaderWrapper>
   )
 }
 

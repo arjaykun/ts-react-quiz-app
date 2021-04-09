@@ -1,28 +1,18 @@
-import React, { useContext, useEffect, useState } from 'react'
+import  { useContext } from 'react'
 import { quizContext } from '../quizContext';
 import EndGameScreen from './EndGameScreen';
-// get questions from api
-import { getQuestions } from '../API';
 // get ENUM, Types
-import { DIFFICULTY, AMOUNT, Answer } from '../API';
-
-
+import { AMOUNT } from '../API';
+// get helper
+import { questionParser } from '../helpers/questionParser';
+// styles
+import { QuizBoxWrapper, StartButton, OptionButton, QuestionText, NextButton } from './QuizBoxStyles'
 
 const QuizBox = () => {
-    const { gameState, setGameState, questions, setQuestions, index, setIndex, setScore } = useContext(quizContext);
-    const [answers, setAnswers] = useState<Answer[]>([])
-
-    useEffect(() => {
-        fetchQuestions();
-        //eslint-disable-next-line
-    }, [])
-
-    const fetchQuestions = async () => {
-        setQuestions(await getQuestions(DIFFICULTY.MEDIUM));
-    }
+    const { gameState, setGameState, questions, index, setIndex, setScore, answers, setAnswers } = useContext(quizContext);
 
     const nextIndex = (): void => {
-        if((index + 1)=== AMOUNT) 
+        if ((index + 1) === AMOUNT)
             setGameState('gameover')
         else
             setIndex(index + 1);
@@ -47,23 +37,30 @@ const QuizBox = () => {
     }
 
     return (
-        <div>
-            { gameState === 'start' && <button onClick={() => setGameState('on-game')}>Start Quiz</button>}
+        <QuizBoxWrapper>
+            { gameState === 'start' && <StartButton onClick={() => setGameState('on-game')}>Start Quiz</StartButton>}
             { gameState === 'on-game' &&
                 <>
-                    <h3>{questions[index]?.question}</h3>
+                    <QuestionText>{questionParser(questions[index]?.question)}</QuestionText>
                     {
                         questions[index]?.options.map((option, i) => (
                             <div key={i}>
-                                <button onClick={() => handleAnswer(option)} disabled={!!answers[index]} >{option}</button>
+                                <OptionButton
+                                    onClick={() => handleAnswer(option)}
+                                    disabled={!!answers[index]}
+                                    answered={!!answers[index]}
+                                    isCorrect={Boolean(answers[index]) && (option === questions[index].correctAnswer)} 
+                                >
+                                    {option}
+                                </OptionButton>
                             </div>
                         ))
                     }
-                    <button onClick={nextIndex}>Next</button>
+                    <NextButton onClick={nextIndex}>Next</NextButton>
                 </>
             }
             { gameState === 'gameover' && (<EndGameScreen answers={answers}></EndGameScreen>)}
-        </div>
+        </QuizBoxWrapper>
     )
 }
 
